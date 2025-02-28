@@ -1,6 +1,6 @@
 <div align=center>
 <img src="https://s2.loli.net/2025/02/28/xMY7QVAfa4sIyrJ.jpg" style="width:100px;"/>
-<h2>SimpleSmallUtil</h2>
+<h2>简小工具</h2>
 </div>
 
 ### 一、产品概述
