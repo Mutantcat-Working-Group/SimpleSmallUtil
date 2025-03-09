@@ -289,7 +289,7 @@
      ```
      注意! 所有参数必传
      key: 迷你云阶功能公钥
-     name: 要获得的版本信息(不带后缀名,信息存放在runtime/cloudstep文件夹)
+     name: 要获得的云阶名称(不带后缀名,信息存放在runtime/cloudstep文件夹)
      ```
 - 返回类型：string
 
