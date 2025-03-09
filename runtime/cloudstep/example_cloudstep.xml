@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>random</mode>
+    <targets>
+        <target>https://www.mutantcat.org/</target>
+        <target>https://www.mutantcat.top/</target>
+        <target>https://github.com/Mutantcat-Working-Group</target>
+    </targets>
+</cloudstep>

@@ -6,9 +6,11 @@
 ### 一、产品概述
 
 - PHP通用简单小工具，简称SSU
-- 时间戳、云变量
+- 时间戳、云变量、图片访问、文件下载、版本信息管理、迷你云阶
 - 可用于支持PHP的云主机、云服务器、云虚拟机
-- 云变量可用于发卡、懒后端、慢消息队列
+- 云变量可用于发卡、懒后端、慢消息队列、区块链
+- 支持密码访问图片、密码下载文件、版本信息动态更新
+- 迷你云阶支持负载均衡、动静态随机、无感更新、静态云变量
 - 任何操作均需携带密钥操作，安全防盗用
 - 参数错误或操作无效时进行无感返回
 - PHP项目可能存在漏洞，公益项目还请手下留情（不要攻击我，可以提漏洞）
@@ -29,11 +31,15 @@
 - 每个功能具有单独公钥，独立配置
 - 公钥修改位置在app/common.php
 
-### 三、数据库配置
+### 三、数据配置
 
 - 数据库应指定为您自己的数据库，项目中所带的无法直接使用
 - 数据库配置位于config/database.php
 - 若您使用了.env，请注意您的.env配置
+- 文件、图片、云阶、版本信息请修改runtime文件夹下对应文件
+- 请勿删除example文件，它们同时也是混淆使用的默认信息
+- 若需要拓展则需要按照example中提供的格式修改
+- 云阶、版本信息等xml信息功能传参无需携带文件后缀名，文件名就是name
 
 ### 四、时间戳接口
 
@@ -136,7 +142,163 @@
      1
      ```
 
-### 六、错误代码
+### 六、图片访问
+
+> /picture/get
+
+   - 接口说明：携带密码访问图片
+   - 请求方式：get
+- 请求参数
+     ```
+     注意! 所有参数必传
+     key: 图片功能公钥
+     name: 图片文件全名(带后缀名,目标文件在runtime/picture文件夹)
+     ```
+- 返回类型：file
+
+- 返回示例：
+     ```
+     直接显示图片
+     ```
+
+### 七、文件下载
+
+> /file/get
+
+   - 接口说明：携带密码下载文件
+   - 请求方式：get
+- 请求参数
+     ```
+     注意! 所有参数必传
+     key: 文件功能公钥
+     name: 文件全名称(带后缀名,目标文件在runtime/file文件夹)
+     ```
+- 返回类型：file
+
+- 返回示例：
+     ```
+     直接下载文件
+     ```
+
+### 八、版本信息管理
+
+> /version/all
+
+   - 接口说明：获取指定产品的版本信息
+   - 请求方式：get
+- 请求参数
+     ```
+     注意! 所有参数必传
+     key: 版本功能公钥
+     name: 要获得的版本信息(不带后缀名,信息存放在runtime/version文件夹)
+     ```
+- 返回类型：json
+
+- 返回示例：
+     ```
+     {
+         "versionInfo": {
+             "name": {
+                 "zh-cn": "简单小软件",
+                 "en": "SimpleSmallUtil"
+             },
+             "description": {
+                 "zh-cn": "PHP通用简单小工具",
+                 "en": "PHP universal simple gadget."
+             },
+             "icon": "https://s2.loli.net/2025/02/28/xMY7QVAfa4sIyrJ.jpg",
+             "lastest": "1.0.20250309",
+             "tags": {
+                 "tag": [
+                     "办公软件",
+                     "开发者工具"
+                 ]
+             },
+             "platforms": {
+                 "platform": "全平台"
+             },
+             "architectures": {
+                 "architecture": [
+                     "x86",
+                     "x64"
+                 ]
+             },
+             "extends": {},
+             "versions": {
+                 "version": [
+                     {
+                         "number": "1.0.20250228",
+                         "releaseDate": "2025-02-28",
+                         "features": {
+                             "feature": [
+                                 "初始版本发布",
+                                 "基本功能实现"
+                             ]
+                         },
+                         "Links": {
+                             "Link": [
+                                 "https://www.mutantcat.org/software/simplesmallutil",
+                                 "https://pan.baidu.com/share/init?surl=2DCvhlz5NhQpWiZS0Z3nBA&pwd=nu2w",
+                                 "https://shuntaoyuan.lanzout.com/ioCrb2p54hdc",
+                                 "https://github.com/Mutantcat-Working-Group/SimpleSmallUtil/releases/tag/v1.0.20250228"
+                             ]
+                         },
+                         "extends": {}
+                     },
+                     {
+                         "number": "1.0.20250309",
+                         "releaseDate": "2025-08-09",
+                         "features": {
+                             "feature": "新增图片、版本、文件、云阶"
+                         },
+                         "Links": {
+                             "Link": "https://www.mutantcat.org/software/simplesmallutil"
+                         },
+                         "extends": {}
+                     }
+                 ]
+             }
+         }
+     }
+     ```
+     
+> /version/lastest
+
+   - 接口说明：获取指定产品的最新版本号
+   - 请求方式：get
+- 请求参数
+     ```
+     注意! 所有参数必传
+     key: 版本功能公钥
+     name: 要获得的版本信息(不带后缀名,信息存放在runtime/version文件夹)
+     ```
+- 返回类型：string
+
+- 返回示例：
+     ```
+     1.0.20250309
+     ```
+
+### 九、迷你云阶
+
+> /cloudstep/get
+
+   - 接口说明：以云阶的方式获取数据
+   - 请求方式：get
+- 请求参数
+     ```
+     注意! 所有参数必传
+     key: 迷你云阶功能公钥
+     name: 要获得的版本信息(不带后缀名,信息存放在runtime/cloudstep文件夹)
+     ```
+- 返回类型：string
+
+- 返回示例：
+     ```
+     mutantcat
+     ```
+
+### 十、错误代码
 
 - `-2`: 事务执行失败
 

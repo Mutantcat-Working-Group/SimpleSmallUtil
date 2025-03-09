@@ -1,2 +1,10 @@
 *
 !.gitignore
+!cloudstep
+!cloudstep/*
+!file
+!file/*
+!picture
+!picture/*
+!version
+!version/*

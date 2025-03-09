@@ -10,10 +10,6 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
-Route::get('think', function () {
-    return 'hello,ThinkPHP8!';
-});
-
 Route::miss(function () {
     return '404';
 });
@@ -30,10 +26,34 @@ Route::group('time', function () {
 
 // 云变量模块
 Route::group('variable', function () {
-    Route::get('/', 'variable.TempVariable/index'); // 获取当前时间
-    Route::get('/add', 'variable.TempVariable/addTempVariable'); // 获取当前时间戳
-    Route::get('/get', 'variable.TempVariable/getTempVariable'); // 获取当前时间戳
-    Route::get('/clean', 'variable.TempVariable/clean'); // 获取当前时间戳
+    Route::get('/', 'variable.TempVariable/index'); // 空接口
+    Route::get('/add', 'variable.TempVariable/addTempVariable'); // 添加云变量
+    Route::get('/get', 'variable.TempVariable/getTempVariable'); // 获取云变量
+    Route::get('/clean', 'variable.TempVariable/clean'); // 触发清理
 });
 
+// 图片模块
+Route::group('picture', function () {
+    Route::get('/', 'picture.PictureGetter/index'); // 空接口
+    Route::get('/get', 'picture.PictureGetter/getPicture'); // 获取当前时间戳
+});
+
+// 文件模块
+Route::group('file', function () {
+    Route::get('/', 'file.FileGetter/index'); // 空接口
+    Route::get('/get', 'file.FileGetter/getFile'); // 获取文件
+});
+
+// 版本模块
+Route::group('version', function () {
+    Route::get('/', 'version.VersionGetter/index'); // 获取版本信息
+    Route::get('/all', 'version.VersionGetter/getAllVersion'); // 获得所有版本的信息
+    Route::get('/lastest', 'version.VersionGetter/getLastestVersion'); // 获得最新版本号
+});
+
+// 云阶模块
+Route::group('cloudstep', function () {
+    Route::get('/', 'cloudstep.CloudStep/index'); // 空接口
+    Route::get('/get', 'cloudstep.CloudStep/getCloudStep'); // 获取云阶结果
+});
 

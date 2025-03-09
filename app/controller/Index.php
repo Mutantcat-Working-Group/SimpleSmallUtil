@@ -8,7 +8,7 @@ class Index extends BaseController
 {
     public function index()
     {
-        return '用于简单小工具(SSU)的请求接口';
+        return 'Welcome,SimpleSmallUtil.xml(SSU),mutantcat.org';
     }
 
     public function ping(){

@@ -10,7 +10,7 @@ class TempVariable
 {
     public function index()
     {
-        return date('Y-m-d H:i:s');
+        return 'mutantcat.org';
     }
 
     public function addTempVariable()

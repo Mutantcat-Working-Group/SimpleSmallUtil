@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<versionInfo>
+    <name>
+        <zh-cn>我的软件</zh-cn>
+        <en>MySoftware</en>
+    </name>
+    <description>
+        <zh-cn>这是一个示例软件</zh-cn>
+        <en>This is an example software</en>
+    </description>
+    <icon>https://example.com/mysoftware/icon.png</icon>
+    <lastest>1.0.20250309</lastest>
+    <tags>
+        <tag>示例</tag>
+        <tag>办公软件</tag>
+    </tags>
+    <platforms>
+        <platform>Windows</platform>
+        <platform>Linux</platform>
+        <platform>MacOS</platform>
+    </platforms>
+    <architectures>
+        <architecture>x86</architecture>
+        <architecture>x64</architecture>
+    </architectures>
+    <extends></extends>
+    <versions>
+        <version>
+            <number>1.0.20250308</number>
+            <releaseDate>2025-03-08</releaseDate>
+            <features>
+                <feature>初始版本发布</feature>
+                <feature>基本功能实现</feature>
+            </features>
+            <Links>
+                <Link>https://www.mutantcat.org/</Link>
+                <Link>https://www.mutantcat.top/</Link>
+            </Links>
+            <extends></extends>
+        </version>
+        <version>
+            <number>1.0.20250309</number>
+            <releaseDate>2025-03-09</releaseDate>
+            <features>
+                <feature>优化性能</feature>
+                <feature>新增用户界面自定义功能</feature>
+            </features>
+            <Links>
+                <Link>https://www.mutantcat.org/</Link>
+                <Link>https://www.mutantcat.top/</Link>
+            </Links>
+            <extends></extends>
+        </version>
+    </versions>
+</versionInfo>
