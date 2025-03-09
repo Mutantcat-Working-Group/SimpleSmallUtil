@@ -10,6 +10,9 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
+// 若需要全局允许跨需要前往public/index.php
+// 若需要单个允许跨域需要加上->allowCrossDomain() 例如Route::get('index', 'index/index')->allowCrossDomain();
+
 Route::miss(function () {
     return '404';
 });
