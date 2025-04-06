@@ -1,5 +1,5 @@
 <div align=center>
-<img src="https://s2.loli.net/2025/02/28/xMY7QVAfa4sIyrJ.jpg" style="width:100px;"/>
+<img src="https://s2.loli.net/2025/02/28/xMY7QVAfa4sIyrJ.jpg" style="width:100px;" width="100"/>
 <h2>简小工具</h2>
 </div>
 
