@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>static_cloud_var</mode>
+    <cloudvar>
+        <private_key>my_private_key</private_key>
+        <key>my_var</key>
+    </cloudvar>
+</cloudstep>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>hash</mode>
+    <targets>
+        <target bucket="0">https://node1.mutantcat.org/</target>
+        <target bucket="1">https://node2.mutantcat.org/</target>
+        <target bucket="2">https://node3.mutantcat.org/</target>
+    </targets>
+</cloudstep>

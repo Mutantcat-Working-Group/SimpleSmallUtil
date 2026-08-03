@@ -286,7 +286,7 @@
 
 > /cloudstep/get
 
-   - 接口说明：以云阶的方式获取数据
+   - 接口说明：以云阶的方式获取数据，支持多种调度模式
    - 请求方式：get
 - 请求参数
      ```
@@ -298,8 +298,68 @@
 
 - 返回示例：
      ```
-     mutantcat
+     https://www.mutantcat.org/
      ```
+
+### 九-一、云阶模式说明
+
+云阶 XML 通过 `<mode>` 字段选择调度模式，支持以下五种：
+
+| mode | 说明 | 典型用途 |
+|---|---|---|
+| `random` | 每次请求随机返回一个 target | 动静态随机、简单负载均衡 |
+| `hash` | 基于客户端 IP（或请求 key 参数）的一致性哈希，同一客户端始终命中同一 target | 负载均衡、会话保持、无感更新 |
+| `static` | 直接返回 XML 中 `<value>` 的固定值 | 静态云变量（最简单的形式） |
+| `static_cloud_var` | 从云变量（temp_value 表）中取值返回，值通过 /variable/add 管理 | 静态云变量（动态管理） |
+
+#### random 模式示例
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>random</mode>
+    <targets>
+        <target>https://www.mutantcat.org/</target>
+        <target>https://www.mutantcat.top/</target>
+        <target>https://github.com/Mutantcat-Working-Group</target>
+    </targets>
+</cloudstep>
+```
+
+#### hash 模式示例（负载均衡 + 无感更新）
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>hash</mode>
+    <targets>
+        <target>https://node1.mutantcat.org/</target>
+        <target>https://node2.mutantcat.org/</target>
+        <target>https://node3.mutantcat.org/</target>
+    </targets>
+</cloudstep>
+```
+> 相同客户端（同 IP，或在请求中携带相同的 `key` 参数）始终命中同一台 target；增减 target 时只有少量客户端迁移，实现无感更新。
+
+#### static 模式示例（静态）
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>static</mode>
+    <value>https://www.mutantcat.org/static-resource</value>
+</cloudstep>
+```
+
+#### static_cloud_var 模式示例（静态云变量，值通过云变量接口管理）
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<cloudstep>
+    <mode>static_cloud_var</mode>
+    <cloudvar>
+        <private_key>my_private_key</private_key>
+        <key>my_var</key>
+    </cloudvar>
+</cloudstep>
+```
+> 返回值为 `temp_value` 表中 `t_key=my_var` 且 `private_key=my_private_key` 的记录值；可通过 `/variable/add` 动态更新该值，云阶侧无需改动。
 
 ### 十、错误代码
 
