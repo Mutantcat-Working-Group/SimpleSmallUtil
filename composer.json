@@ -22,8 +22,7 @@
     "require": {
         "php": ">=8.0.0",
         "topthink/framework": "^8.0",
-        "topthink/think-orm": "^3.0|^4.0",
-        "topthink/think-filesystem": "^2.0"
+        "topthink/think-orm": "^3.0|^4.0"
     },
     "require-dev": {
         "topthink/think-dumper": "^1.0",
@@ -32,18 +31,9 @@
     "autoload": {
         "psr-4": {
             "app\\": "app"
-        },
-        "psr-0": {
-            "": "extend/"
         }
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "@php think service:discover",
-            "@php think vendor:publish"
-        ]
     }
 }

@@ -28,11 +28,6 @@ if (!defined('VERSION_PUBLIC_KEY')) {
     define('VERSION_PUBLIC_KEY', 'mutantcat');
 }
 
-// 文件公钥
-if (!defined('FILE_PUBLIC_KEY')) {
-    define('FILE_PUBLIC_KEY', 'mutantcat');
-}
-
 // 云阶公钥
 if (!defined('CLOUDSTEP_PUBLIC_KEY')) {
     define('CLOUDSTEP_PUBLIC_KEY', 'mutantcat');

@@ -207,7 +207,7 @@
                  "en": "PHP universal simple gadget."
              },
              "icon": "https://s2.loli.net/2025/02/28/xMY7QVAfa4sIyrJ.jpg",
-             "lastest": "1.0.20250309",
+             "lastest": "1.0.20260803",
              "tags": {
                  "tag": [
                      "办公软件",
@@ -246,16 +246,19 @@
                          "extends": {}
                      },
                      {
-                         "number": "1.0.20250309",
-                         "releaseDate": "2025-08-09",
+                         "number": "1.0.20260803",
+                         "releaseDate": "2026-08-03",
                          "features": {
-                             "feature": "新增图片、版本、文件、云阶"
+                             "feature": "精简 ThinkPHP 冗余组件、修复安全漏洞"
                          },
                          "Links": {
                              "Link": "https://www.mutantcat.org/software/simplesmallutil"
                          },
                          "extends": {}
-                     }
+                     },
+                     {
+                         "number": "1.0.20250309",
+                         "releaseDate": "2025-03-09",
                  ]
              }
          }
@@ -276,7 +279,7 @@
 
 - 返回示例：
      ```
-     1.0.20250309
+     1.0.20260803
      ```
 
 ### 九、迷你云阶接口

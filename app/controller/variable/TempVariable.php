@@ -3,6 +3,7 @@
 namespace app\controller\variable;
 
 use think\facade\Db;
+use think\db\exception\DbException;
 
 include dirname(__DIR__, 2) . '/common.php';
 
@@ -15,75 +16,70 @@ class TempVariable
 
     public function addTempVariable()
     {
-        // 获得请求参数
-        $public_key = input('get.public_key');
-        $private_key = input('get.private_key');
-        $key = input('get.key');
-        $value = input('get.value');
-        // 传入为时间毫秒数 表示有效的时间
-        $expiration_date = input('get.expiration_date');
-        // 是否是一次性的 0为否 1为是
-        $once = input('get.once');
+        $public_key = (string) input('get.public_key');
+        $private_key = (string) input('get.private_key');
+        $key = (string) input('get.key');
+        $value = (string) input('get.value');
+        $expiration_date = (string) input('get.expiration_date');
+        $once = (string) input('get.once');
 
-        // 缺一不可 缺就反回默认-1
-        if (!$public_key || !$private_key || !$key || !$value || !$expiration_date) {
-            return '{"id":-1,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
+        if (
+            $public_key === '' || $private_key === '' || $key === '' || $value === '' || $expiration_date === ''
+            || ($once !== '0' && $once !== '1')
+            || $public_key !== VALUE_PUBLIC_KEY
+        ) {
+            return $this->errorResponse();
         }
 
-        if ($once != 0 && $once != 1) {
-            return '{"id":-1,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
-        }
-
-        if ($public_key != VALUE_PUBLIC_KEY) {
-            return '{"id":-1,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
-        }
-
-        // 根据毫秒计算过期时间
-        if ($expiration_date != 0) {
-            $expiration_date = date('Y-m-d H:i:s', time() + $expiration_date / 1000);
+        // 毫秒转过期时间；0 表示永不过期（用一个远超当前时间的日期表示）
+        $expire = null;
+        if ($expiration_date !== '0') {
+            $expire = date('Y-m-d H:i:s', time() + ((int) $expiration_date) / 1000);
         }
 
         try {
-            // 开启事务
             Db::startTrans();
 
-            // 试着找到私钥和key都一样的
-            $data = Db::table('temp_value')->where('t_key', $key)->where('private_key', $private_key)->find();
+            $existing = Db::table('temp_value')
+                ->where('t_key', $key)
+                ->where('private_key', $private_key)
+                ->find();
 
-            if ($data) {
-                if ($expiration_date != 0) {
-                    $data = Db::table('temp_value')->where('t_key', $key)->update([
-                        't_value' => $value,
-                        'expiration_date' => $expiration_date,
-                        'once' => $once
-                    ]);
-                } else {
-                    // 若过期时间为0 则不更新过期时间
-                    $data = Db::table('temp_value')->where('t_key', $key)->update([
-                        't_value' => $value,
-                        'once' => $once
-                    ]);
+            if ($existing) {
+                $update = [
+                    't_value' => $value,
+                    'once' => (int) $once,
+                ];
+                // null 表示保留原过期时间
+                if ($expire !== null) {
+                    $update['expiration_date'] = $expire;
                 }
+                Db::table('temp_value')
+                    ->where('id', $existing['id'])
+                    ->update($update);
+                $data = Db::table('temp_value')
+                    ->where('id', $existing['id'])
+                    ->find();
             } else {
-                $data = Db::table('temp_value')->insert([
+                // 新建时 0 表示永不过期，用一个远超当前时间的日期代表
+                $newId = Db::table('temp_value')->insertGetId([
                     't_key' => $key,
                     't_value' => $value,
-                    'expiration_date' => $expiration_date,
+                    'expiration_date' => $expire ?? '2099-12-31 23:59:59',
                     'private_key' => $private_key,
-                    'once' => $once
+                    'once' => (int) $once,
                 ]);
+                $data = Db::table('temp_value')
+                    ->where('id', $newId)
+                    ->find();
             }
 
-            // 提交事务
             Db::commit();
         } catch (DbException $e) {
-            // 回滚事务
             Db::rollback();
-            // 处理异常，如果操作失败，返回-2
-            return '{"id":-2,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
+            return $this->errorResponse(-2);
         }
 
-        // 上述代码若执行成功 则检查并清除
         $this->checkAndClean();
 
         return json_encode($data);
@@ -91,74 +87,73 @@ class TempVariable
 
     public function getTempVariable()
     {
-        // 获得请求参数
-        $public_key = input('get.public_key');
-        $private_key = input('get.private_key');
-        $key = input('get.key');
-        $destory = input('get.destory');
+        $public_key = (string) input('get.public_key');
+        $private_key = (string) input('get.private_key');
+        $key = (string) input('get.key');
+        $destory = (string) input('get.destory');
 
-        if ($public_key != VALUE_PUBLIC_KEY) {
-            return '{"id":-1,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
+        if ($public_key !== VALUE_PUBLIC_KEY) {
+            return $this->errorResponse();
         }
 
         try {
-            // 开启事务
             Db::startTrans();
 
-            // 查询数据是否存在
-            $data = Db::table('temp_value')->where('t_key', $key)->where('private_key', $private_key)->find();
+            $data = Db::table('temp_value')
+                ->where('t_key', $key)
+                ->where('private_key', $private_key)
+                ->find();
 
-            // 检查是否为空
             if (!$data) {
-                return '{"id":-1,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
+                Db::commit();
+                return $this->errorResponse();
             }
 
-            // 检查是否为一次性
-            if ($data['once'] == 1 || $destory == 1) {
-                // 删除数据
+            if (!empty($data['once']) || $destory === '1') {
                 Db::table('temp_value')->where('id', $data['id'])->delete();
             }
 
-            // 提交事务
             Db::commit();
         } catch (DbException $e) {
-            // 回滚事务
             Db::rollback();
-            // 处理异常，如果操作失败，返回-2
-            return '{"id":-2,"t_key":"null","t_value":"null","expiration_date":"2099-99-99 00:00:00","private_key":"null","once":0}';
+            return $this->errorResponse(-2);
         }
 
-        // 上述代码若执行成功 则检查并清除
         $this->checkAndClean();
 
         return json_encode($data);
     }
 
-    // 主动触发清除过期变量
     public function clean()
     {
         return $this->checkAndClean() ? "1" : "0";
     }
 
-    // 检查并清除过期的变量
     public function checkAndClean()
     {
         try {
-            // 开启事务
             Db::startTrans();
-
-            // 清除过期变量
-            Db::table('temp_value')->where('expiration_date', '<', date('Y-m-d H:i:s'))->delete();
-
-            // 提交事务
+            Db::table('temp_value')
+                ->where('expiration_date', '<', date('Y-m-d H:i:s'))
+                ->delete();
             Db::commit();
         } catch (DbException $e) {
-            // 回滚事务
             Db::rollback();
-            // 处理异常，如果操作失败，返回-2
             return false;
         }
 
         return true;
+    }
+
+    private function errorResponse(int $code = -1): string
+    {
+        return json_encode([
+            'id' => $code,
+            't_key' => 'null',
+            't_value' => 'null',
+            'expiration_date' => '2099-99-99 00:00:00',
+            'private_key' => 'null',
+            'once' => 0,
+        ]);
     }
 }

@@ -9,7 +9,7 @@
         <en>PHP universal simple gadget.</en>
     </description>
     <icon>https://s2.loli.net/2025/02/28/xMY7QVAfa4sIyrJ.jpg</icon>
-    <lastest>1.0.20250309</lastest>
+    <lastest>1.0.20260803</lastest>
     <tags>
         <tag>办公软件</tag>
         <tag>开发者工具</tag>
@@ -23,6 +23,18 @@
     </architectures>
     <extends></extends>
     <versions>
+        <version>
+            <number>1.0.20260803</number>
+            <releaseDate>2026-08-03</releaseDate>
+            <features>
+                <feature>精简 ThinkPHP 冗余组件</feature>
+                <feature>修复安全漏洞</feature>
+            </features>
+            <Links>
+                <Link>https://www.mutantcat.org/software/simplesmallutil</Link>
+            </Links>
+            <extends></extends>
+        </version>
         <version>
             <number>1.0.20250228</number>
             <releaseDate>2025-02-28</releaseDate>
