@@ -58,7 +58,7 @@ jobs:
       - name: Package release archive
         run: |
           mkdir -p dist
-          tar --exclude='./.git' --exclude='./.github' --exclude='./runtime/*.log' \
+          tar --exclude='./.git' --exclude='./.github' --exclude='./dist' --exclude='./runtime/*.log' \
             -czf "dist/${APP_NAME}-${{ steps.version.outputs.value }}.tar.gz" .
 
       - name: Upload release artifact
