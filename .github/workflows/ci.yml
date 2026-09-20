@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, sqlite, curl, mbstring, xml, fileinfo
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: php -l public/index.php
+      - run: find app config route -name '*.php' -print0 | xargs -0 -n1 php -l
